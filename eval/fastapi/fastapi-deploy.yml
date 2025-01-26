@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-exam-fastapi-deploy
+  labels:
+    app: k8s-exam-fastapi-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-exam-fastapi-deploy
+  template:
+    metadata:
+      labels:
+        app: k8s-exam-fastapi-deploy
+    spec:
+      containers:
+        - name: k8s-exam-fastapi-deploy
+          image: thibaultbezpalko/k8s-dst-eval-fastapi:latest
+          command: ["uvicorn"]
+          args: ["main:app", "--host", "0.0.0.0", "--port", "8000"]
+          envFrom:
+            - secretRef:
+                name: k8s-exam-mysqldb-user
+      #     volumeMounts:
+      #       - name: app-volume
+      #         mountPath: /app # Path in the container
+      # volumes:
+      #   - name: app-volume
+      #     hostPath:
+      #       path: /home/ubuntu/DST_MLOPS_05_Kubernetes_Exam/eval/fastapi  # Path on host machine
+      #       type: Directory

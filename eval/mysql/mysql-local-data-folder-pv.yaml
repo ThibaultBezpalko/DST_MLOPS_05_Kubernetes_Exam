@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: k8s-exam-pv
+spec:
+  storageClassName: local-path
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+     namespace: k8s-exam
+     name: k8s-exam-pvc
+  hostPath:
+    path: "/mnt/data"

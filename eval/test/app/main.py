@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import os
 
+print(os.environ)
+
 app = FastAPI()
 
 mysql_user = os.environ["MYSQL_USER"]
@@ -26,21 +28,23 @@ class TableSchema(BaseModel):
 @app.get("/tables")
 async def get_tables():
     with mysql_engine.connect() as connection:
+        print("hello")
         results = connection.execute(text('SHOW TABLES;'))
         dict_res = {}
         dict_res['database'] = [str(result[0]) for result in results.fetchall()]
         return dict_res
 
-# @app.put("/table")
-# async def create_table(schema: TableSchema):
-#     columns = [Column(col_name, eval(col_type)) for col_name, col_type in schema.columns.items()]
-#     table = Table(schema.table_name, metadata, *columns)
-#     try:
-#         metadata.create_all(mysql_engine, tables=[table], checkfirst=False)
-#         return f"{schema.table_name} successfully created"
-#     except SQLAlchemyError as e:
-#         return dict({"error_msg": str(e)})
+@app.put("/table")
+async def create_table(schema: TableSchema):
+    columns = [Column(col_name, eval(col_type)) for col_name, col_type in schema.columns.items()]
+    table = Table(schema.table_name, metadata, *columns)
+    try:
+        metadata.create_all(mysql_engine, tables=[table], checkfirst=False)
+        return f"{schema.table_name} successfully created"
+    except SQLAlchemyError as e:
+        return dict({"error_msg": str(e)})
 
+'''
 from sqlalchemy import Integer, String, DateTime, Float, Boolean
 from sqlalchemy.types import Integer, String, DateTime
 
@@ -65,16 +69,14 @@ async def create_table(schema: TableSchema):
         return f"{schema.table_name} successfully created"
     except SQLAlchemyError as e:
         return {"error_msg": str(e)}    
+'''
 
 
 '''
 {
   "table_name": "user_data",
   "columns": {
-    "id": "INT",
-    "username": "VARCHAR(255)",
-    "email": "VARCHAR(255) UNIQUE",
-    "created_at": "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+    "id": "Integer"
   }
 }
 '''

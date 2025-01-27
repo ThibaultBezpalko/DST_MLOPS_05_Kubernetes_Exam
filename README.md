@@ -74,17 +74,16 @@ kubectl delete svc k8s-exam-mysqldb-service -n k8s-exam
 ## Prepare the final api image
 ### Build the first version of api
 > build the docker image
-docker build -t k8s-exam-fastapi:latest .
+docker build -t k8s-exam-fastapi:gpt .
 
 > connect to dockerhub
 docker login
 
 > tag the image
-docker tag k8s-exam-fastapi:latest thibaultbezpalko/k8s-dst-eval-fastapi:latest
+docker tag k8s-exam-fastapi:gpt thibaultbezpalko/k8s-dst-eval-fastapi:gpt
 
 > push the image to Dockerhub
-docker push thibaultbezpalko/k8s-dst-eval-fastapi:latest
-
+docker push thibaultbezpalko/k8s-dst-eval-fastapi:gpt
 
 
 ### Launch the api 
@@ -99,6 +98,15 @@ kubectl logs -f k8s-exam-fastapi -n k8s-exam
 
 > deletion 
 kubectl delete pod k8s-exam-fastapi -n k8s-exam
+
+
+### Launch the api exposing service
+> create the item NodePort + check
+kubectl apply -f fastapi-pod-nodeport.yml -n k8s-exam
+kubectl get svc k8s-exam-fastapi-pod-nodeport -n k8s-exam
+
+> deletion 
+kubectl delete svc k8s-exam-fastapi-pod-nodeport -n k8s-exam
 
 
 
@@ -127,4 +135,6 @@ kubectl get svc k8s-exam-fastapi-nodeport -n k8s-exam
 
 > deletion 
 kubectl delete svc k8s-exam-fastapi-nodeport -n k8s-exam
+
+
 

@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: k8s-exam-fastapi
-      image: thibaultbezpalko/k8s-exam-fastapi:latest
+      image: thibaultbezpalko/k8s-dst-eval-fastapi:gpt
       command: ["uvicorn"]
       args: ["main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
       envFrom:

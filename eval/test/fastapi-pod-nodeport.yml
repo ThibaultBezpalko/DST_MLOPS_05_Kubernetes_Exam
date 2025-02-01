@@ -10,6 +10,6 @@ spec:
     app: k8s-exam-fastapi
   ports:
   - protocol: TCP
-    port: 8000
-    targetPort: 8000
-    nodePort: 30000
+    port: 8001
+    targetPort: 8001
+    nodePort: 30001
